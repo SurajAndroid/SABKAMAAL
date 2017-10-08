@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:layout_margin="3sp"
+        android:padding="5sp"
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        app:cardCornerRadius="5dp">
+
+        <RelativeLayout
+            android:background="#fff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:background="@drawable/image_bg"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/book"
+                android:padding="5dp"
+                android:layout_alignParentTop="true"
+                android:layout_margin="10dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:id="@+id/ivFish_banner"/>
+
+
+
+            <TextView
+                android:textSize="18sp"
+                android:maxLines="1"
+                android:textStyle="bold"
+                android:textColor="@color/textcolor"
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Name"
+                android:id="@+id/names"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/ivFish_banner"/>
+
+            <TextView
+                android:maxLines="1"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="Rs"
+                android:id="@+id/pricetag"
+                android:layout_marginLeft="10dp"
+                android:layout_below="@id/names"
+                android:layout_toRightOf="@id/ivFish_banner"
+                android:layout_toEndOf="@id/ivFish_banner"
+                android:textColor="@color/colorAccent"/>
+            <TextView
+                android:maxLines="1"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="100"
+                android:id="@+id/price"
+                android:layout_marginLeft="5dp"
+                android:layout_below="@id/names"
+                android:layout_toRightOf="@id/pricetag"
+                android:layout_toEndOf="@id/pricetag"
+                android:textColor="@color/colorAccent"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Qty"
+                android:id="@+id/textprice"
+                android:textSize="15sp"
+                android:layout_marginLeft="10dp"
+                android:layout_below="@id/price"
+                android:layout_toRightOf="@id/ivFish_banner"
+                android:textColor="@color/textcolor"/>
+            <EditText
+                android:id="@+id/qty"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:inputType="number"
+                android:textColor="@color/textcolor"
+                android:gravity="center"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/edittextborder"
+                android:layout_below="@id/price"
+                android:layout_toRightOf="@id/textprice"
+                android:hint="Enter qty here"/>
+
+            <TextView
+                android:maxLines="1"
+                android:textStyle="bold"
+                android:id="@+id/totalprice1"
+                android:layout_marginTop="8dp"
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="Rs"
+                android:gravity="center"
+                android:layout_marginLeft="50dp"
+                android:layout_below="@id/price"
+                android:layout_toRightOf="@id/qty"
+                android:textColor="@color/textcolor"/>
+            <TextView
+                android:maxLines="1"
+                android:textStyle="bold"
+                android:id="@+id/totalprice"
+                android:layout_marginTop="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:layout_marginLeft="5dp"
+                android:text="0"
+                android:layout_below="@id/price"
+                android:layout_toRightOf="@id/totalprice1"
+                android:textColor="@color/textcolor"/>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+
+</LinearLayout>

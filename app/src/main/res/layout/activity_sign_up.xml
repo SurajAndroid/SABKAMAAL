@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="105dp"
+            android:text="Sign Up Now!"
+            android:textStyle="normal"
+            android:gravity="center"
+            android:textSize="30dp"
+            android:textColor="#fff"
+            android:background="@drawable/gradient_bg"
+            android:scaleType="fitXY"
+            >
+        </TextView>
+
+        <LinearLayout
+            android:id="@+id/signup"
+            android:layout_marginTop="120dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:paddingTop="18dp">
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <EditText
+                        android:id="@+id/input_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:textSize="13dp"
+                        android:hint="Full Name" />
+                </android.support.design.widget.TextInputLayout>
+                <android.widget.ImageView
+                    android:layout_height="20dp"
+                    android:layout_width="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:tint="@color/iconcolor"
+                    android:src="@drawable/ic_perm_identity_black_24dp">
+                </android.widget.ImageView>
+            </FrameLayout>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:paddingTop="1dp">
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <EditText
+                        android:id="@+id/input_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress"
+                        android:textSize="13dp"
+                        android:hint="Email" />
+                </android.support.design.widget.TextInputLayout>
+                <android.widget.ImageView
+                    android:layout_height="20dp"
+                    android:layout_width="20dp"
+                    android:layout_marginRight="10dp"
+                    android:tint="@color/iconcolor"
+                    android:layout_gravity="right|center_vertical"
+                    android:src="@drawable/ic_mail_outline_black_24dp">
+                </android.widget.ImageView>
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:paddingTop="1dp">
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <EditText
+                        android:id="@+id/input_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:textSize="13dp"
+                        android:hint="Password" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.widget.ImageView
+                    android:layout_height="20dp"
+                    android:layout_width="20dp"
+                    android:layout_marginRight="10dp"
+                    android:tint="@color/iconcolor"
+                    android:layout_gravity="right|center_vertical"
+                    android:src="@drawable/ic_lock_outline_black_24dp"
+                    android:id="@+id/imageView">
+                </android.widget.ImageView>
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:paddingTop="1dp">
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <EditText
+                        android:id="@+id/input_mobile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:textSize="13dp"
+                        android:hint="Mobile Number" />
+                </android.support.design.widget.TextInputLayout>
+                <android.widget.ImageView
+                    android:layout_height="20dp"
+                    android:layout_width="20dp"
+                    android:layout_marginRight="10dp"
+                    android:tint="@color/iconcolor"
+                    android:layout_gravity="right|center_vertical"
+                    android:src="@drawable/ic_phone_black_24dp">
+                </android.widget.ImageView>
+            </FrameLayout>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btn_signup"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="24dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_gravity="center"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:letterSpacing=".05"
+                android:background="@drawable/btn_rounded"
+                android:textColor="#fff"
+                android:text="SIGNUP NOW!"
+                android:textStyle="normal"
+                android:textSize="15dp"/>
+
+        </LinearLayout>
+        <TextView
+            android:layout_below="@+id/signup"
+            android:id="@+id/link_login"
+            android:layout_marginTop="70dp"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:text="You have account,login here!"
+            android:textStyle="normal"
+            android:paddingTop="10dp"
+            android:textAlignment="center"
+            android:textColor="@color/textcolor"
+            android:textSize="15dp"
+            android:layout_gravity="center"
+            >
+        </TextView>
+    </RelativeLayout>
+
+</ScrollView>

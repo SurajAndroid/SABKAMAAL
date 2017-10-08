@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TableRow
+        android:paddingTop="5sp"
+        android:paddingBottom="5sp"
+        android:id="@+id/tableRow10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        >
+
+        <TextView
+            android:layout_marginLeft="5sp"
+            android:textColor="#000"
+            android:singleLine="true"
+            android:id="@+id/name"
+            android:layout_weight="1"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:text="Name"
+            />
+
+        <TextView
+            android:textColor="#000"
+            android:singleLine="true"
+            android:id="@+id/Qty"
+            android:layout_weight="1"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="16dp"
+            android:text="Qty" />
+
+        <TextView
+            android:textColor="#000"
+            android:singleLine="true"
+            android:id="@+id/Rate"
+            android:layout_weight="1"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+
+            android:textSize="16dp"
+            android:text="Rate" />
+
+        <TextView
+            android:layout_marginRight="5sp"
+            android:textColor="#000"
+            android:singleLine="true"
+            android:id="@+id/Amt"
+            android:layout_weight="1"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+
+            android:textSize="16dp"
+            android:text="Amount" />
+
+
+
+
+    </TableRow>
+
+
+</LinearLayout>

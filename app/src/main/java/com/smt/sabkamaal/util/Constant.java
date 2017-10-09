@@ -25,14 +25,29 @@ public class Constant {
 
 
 	public static final int CREATEORDER = 1;
+	public static final int LOGIN = 2;
+	public static final int SIGNUP = 3;
+	public static final int HISTORY = 4;
 
 
 	public static String BASE_URL ="http://pahun.in/api/index.php/";
 
 	public static String CREATE_ORDER_URL = BASE_URL+"createorder";
+	public static String LOGIN_URL = BASE_URL+"login";
+	public static String SIGN_UP_URL = BASE_URL+"registration";
+	public static String HISTORY_URL = BASE_URL+"history";
 
+	public static String USER_ID="";
 	public static String NAME="";
 	public static String USER_NAME="";
+	public static String EMAIl="";
+	public static String PASSWORD="";
+	public static String MOBILE="";
+	public static String ADDRESS="";
+
+
+	public static String GUMASHTA="";
+	public static String ADHAR="";
 
 
 	public static String EMAIL_PETTERN = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9][.com])?)*$";

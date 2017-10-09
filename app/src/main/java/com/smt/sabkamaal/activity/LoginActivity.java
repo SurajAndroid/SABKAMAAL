@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,6 +27,10 @@ import com.smt.sabkamaal.constant.URLConstant;
 import com.smt.sabkamaal.holder.Login;
 import com.smt.sabkamaal.preference.PreferenceHelper;
 import com.smt.sabkamaal.util.AppUtils;
+import com.smt.sabkamaal.util.Constant;
+import com.smt.sabkamaal.util.MarshMallowPermission;
+import com.smt.sabkamaal.util.RequestReceiver;
+import com.smt.sabkamaal.util.WebserviceHelper;
 import com.smt.sabkamaal.webService.WebServiceUtil;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.RequestBody;
@@ -37,7 +42,8 @@ import butterknife.ButterKnife;
 
 import static com.smt.sabkamaal.R.id.login;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener, RequestReceiver {
+    RequestReceiver receiver;
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
     final Context context = this;
@@ -54,6 +60,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     TextView _forgotpwdLink;
     @Bind(R.id.rememberMe)CheckBox _rememberMe;
     SharedPreferences sharedPreferences;
+    MarshMallowPermission marshMallowPermission;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +69,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         ButterKnife.bind(this);
+        receiver = this;
         _rememberMe.setOnClickListener(this);
         _loginButton.setOnClickListener(this);
         _signupLink.setOnClickListener(this);
@@ -85,13 +93,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             //get previously stored login details
             String email = PreferenceHelper.getInstance(context).getUserEmailId();
             String password = PreferenceHelper.getInstance(context).getUserPassword();
-            if(email != null && password != null && !email.equals("") && !password.equals("")){
-                //fill input boxes with stored email and password
-                _emailText.setText(email);
-                _passwordText.setText(password);
-                _rememberMe.setChecked(true);
+            _emailText.setText(email);
+            _passwordText.setText(password);
+            _rememberMe.setChecked(true);
+
+        }
+
+        marshMallowPermission = new MarshMallowPermission(LoginActivity.this);
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (!marshMallowPermission.checkPermissionForExternalStorage()) {
+                marshMallowPermission.requestPermissionForExternalStorage();
+
             }
         }
+
     }
     private void saveLoginDetails(){
         //fill input boxes with stored login and pass
@@ -143,19 +158,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+
+    public void loginService() {
+        WebserviceHelper login = new WebserviceHelper(receiver, LoginActivity.this);
+        login.setAction(Constant.LOGIN);
+        login.execute();
+    }
+
     public void login() {
         Log.d(TAG, "Login");
-
         if (!validate()) {
             _loginButton.setEnabled(true);
             return;
         }
+//        _loginButton.setEnabled(false);
+        Constant.MOBILE = _emailText.getText().toString();
+        Constant.PASSWORD = _passwordText.getText().toString();
 
-        _loginButton.setEnabled(false);
-        String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
-        new LoginTask(URLConstant.URL_LOGIN, email, password).execute();
-
+        loginService();
     }
 
     @Override
@@ -169,34 +189,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onBackPressed() {
-
         moveTaskToBack(true);
     }
 
-    public void onLoginSuccess(Login login) {
+   /* public void onLoginSuccess(Login login) {
         _loginButton.setEnabled(true);
+    }*/
 
-        Intent intent = new Intent(this, ProductActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-
-    }
-
-    public void onLoginFailed(String message) {
+    /*public void onLoginFailed(String message) {
         Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
         _loginButton.setEnabled(true);
-    }
+    }*/
 
     public boolean validate() {
         boolean valid = true;
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError("enter a valid email address");
-            valid = false;
-        } else {
-            _emailText.setError(null);
-        }
 
         if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
             _passwordText.setError("between 4 and 10 alphanumeric characters");
@@ -208,14 +216,37 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         return valid;
     }
 
-    private class LoginTask extends AsyncTask<String, String, String> {
-        String email;
+    @Override
+    public void requestFinished(String[] result) throws Exception {
+
+        if(result[0].equals("1")){
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("user_id", ""+AppUtils.profileList.get(0).getUser_id());
+            editor.putString("full_name",""+AppUtils.profileList.get(0).getFull_name());
+            editor.putString("email", ""+AppUtils.profileList.get(0).getEmail());
+            editor.putString("mobile", ""+AppUtils.profileList.get(0).getMobile());
+            editor.putString("address",""+AppUtils.profileList.get(0).getAddress());
+            editor.putString("gumasta", ""+AppUtils.profileList.get(0).getGumasta());
+            editor.putString("adhaar", ""+AppUtils.profileList.get(0).getAdhaar());
+            editor.putString("status", ""+1);
+            editor.commit();
+            Intent intent = new Intent(this, ProductActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }else {
+            Toast.makeText(getApplicationContext(),""+result[1],Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /*private class LoginTask extends AsyncTask<String, String, String> {
+        String mobile;
         String password;
         String url;
         ProgressDialog progressDialog;
 
         LoginTask(String url, String email, String password) {
-            this.email = email;
+            this.mobile = email;
             this.password = password;
             this.url = url;
         }
@@ -247,7 +278,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         @NonNull
         private RequestBody getRequestBody() {
             return new FormEncodingBuilder()
-                    .add(AppConstants.EMAIL, email)
+                    .add(AppConstants.EMAIL, mobile)
                     .add(AppConstants.PASSWORD, password)
                     .build();
         }
@@ -298,6 +329,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 _loginButton.setEnabled(true);
             }
         }
-    }
+    }*/
 
 }

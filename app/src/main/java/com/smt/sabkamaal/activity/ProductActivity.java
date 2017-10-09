@@ -1,13 +1,16 @@
 package com.smt.sabkamaal.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,7 +22,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -79,10 +84,17 @@ public class ProductActivity extends AppCompatActivity {
     private static int currentPage = 0;
     private static final Integer[] XMEN= {R.drawable.image_slide5,R.drawable.image_slide2,R.drawable.imageslid3,R.drawable.image_slide4,R.drawable.image_slide5};
     private ArrayList<Integer> XMENArray = new ArrayList<Integer>();
+
+    DrawerLayout drawer_layout;
+    LinearLayout slidMenuLayout;
+    TextView rateUsTxt, offerTxt, rewardTxt, termsTxt, logoutTxt, orderHistoryTxt;
+    SharedPreferences sharedPreferences;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.home_activity);
+        setContentView(R.layout.activity_main_new);
         init();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         progressDialog = new ProgressDialog(ProductActivity.this);
@@ -111,6 +123,17 @@ public class ProductActivity extends AppCompatActivity {
 
     }
     private void init() {
+        sharedPreferences = this.getSharedPreferences("login_status", Context.MODE_PRIVATE);
+        rateUsTxt = (TextView)findViewById(R.id.rateUsTxt);
+        offerTxt = (TextView)findViewById(R.id.offerTxt);
+        rewardTxt = (TextView)findViewById(R.id.rewardTxt);
+        termsTxt = (TextView)findViewById(R.id.termsTxt);
+        logoutTxt = (TextView)findViewById(R.id.logoutTxt);
+        orderHistoryTxt = (TextView)findViewById(R.id.orderHistoryTxt);
+
+        slidMenuLayout = (LinearLayout)findViewById(R.id.slidMenuLayout);
+        drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         for(int i=0;i<XMEN.length;i++)
             XMENArray.add(XMEN[i]);
 
@@ -136,6 +159,72 @@ public class ProductActivity extends AppCompatActivity {
                 handler.post(Update);
             }
         }, 2500, 2500);
+
+
+        /*Click Listener*/
+        slidMenuLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer_layout.openDrawer(GravityCompat.START);
+            }
+        });
+
+
+        rateUsTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer_layout.closeDrawers();
+            }
+        });
+
+        offerTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer_layout.closeDrawers();
+            }
+        });
+
+        rewardTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer_layout.closeDrawers();
+            }
+        });
+
+        termsTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer_layout.closeDrawers();
+            }
+        });
+
+        logoutTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer_layout.closeDrawers();
+                sharedPreferences =  ProductActivity.this.getSharedPreferences("login_status",Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.commit();
+                Intent intent = new Intent(ProductActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
+
+        orderHistoryTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer_layout.closeDrawers();
+                Intent intent = new Intent(ProductActivity.this, HistoryActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+
+
+
     }
     public void fetchCategoryFromServer() {
 

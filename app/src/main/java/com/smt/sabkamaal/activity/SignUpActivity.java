@@ -1,11 +1,16 @@
 package com.smt.sabkamaal.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -22,22 +27,26 @@ import com.smt.sabkamaal.holder.LoginData;
 import com.smt.sabkamaal.holder.Registration;
 import com.smt.sabkamaal.holder.RegistrationData;
 import com.smt.sabkamaal.util.AppUtils;
+import com.smt.sabkamaal.util.Constant;
+import com.smt.sabkamaal.util.RequestReceiver;
+import com.smt.sabkamaal.util.WebserviceHelper;
 import com.smt.sabkamaal.webService.WebServiceUtil;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.RequestBody;
 
+import java.io.File;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity implements RequestReceiver{
     private static final String TAG = "SignupActivity";
+    RequestReceiver receiver;
+    EditText _address,_fullnameText, _emailText, _mobileText, _passwordText;
+    TextView AddAdhar, AddGumashta, link_login;
+    AppCompatButton btn_signup;
 
-    @Bind(R.id.input_name)EditText _fullnameText;
-    @Bind(R.id.input_email) EditText _emailText;
-    @Bind(R.id.input_mobile) EditText _mobileText;
-    @Bind(R.id.input_password) EditText _passwordText;
-    @Bind(R.id.btn_signup) Button _signupButton;
-    @Bind(R.id.link_login) TextView _loginLink;
+    String  imgStatus;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,7 +55,20 @@ public class SignUpActivity extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         ButterKnife.bind(this);
 
-        _signupButton.setOnClickListener(new View.OnClickListener() {
+        _address = (EditText)findViewById(R.id._address);
+        _fullnameText = (EditText)findViewById(R.id._fullnameText);
+        _emailText = (EditText)findViewById(R.id._emailText);
+        _mobileText = (EditText)findViewById(R.id._mobileText);
+        _passwordText = (EditText)findViewById(R.id._passwordText);
+        btn_signup = (AppCompatButton)findViewById(R.id.btn_signup);
+
+        link_login = (TextView)findViewById(R.id.link_login);
+        AddAdhar = (TextView)findViewById(R.id.AddAdhar);
+        AddGumashta = (TextView)findViewById(R.id.AddGumashta);
+
+        receiver = this;
+
+        btn_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (AppUtils.getInstance(SignUpActivity.this).isNetworkConnected()) {
@@ -57,7 +79,27 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
-        _loginLink.setOnClickListener(new View.OnClickListener() {
+        AddAdhar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, 2);
+                imgStatus = "1";
+            }
+        });
+
+        AddGumashta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, 2);
+                imgStatus = "2";
+            }
+        });
+
+        link_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Finish the registration screen and return to the Login activity
@@ -69,38 +111,54 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 2 && resultCode == RESULT_OK
+                && null != data) {
+            Uri selectedImage = data.getData();
+
+            if(imgStatus.equals("1")){
+                Constant.ADHAR = getRealPathFromUri(SignUpActivity.this,selectedImage);
+            }else {
+                Constant.GUMASHTA = getRealPathFromUri(SignUpActivity.this,selectedImage);
+            }
+        }
+    }
+
+
+    public String getRealPathFromUri(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+
     public void signup() {
         Log.d(TAG, "Signup");
 
         if (!validate()) {
-//            onSignupFailed("SignUp Failed");
-            _signupButton.setEnabled(true);
+            btn_signup.setEnabled(true);
             return;
         }
 
-        _signupButton.setEnabled(false);
-
-        RegistrationData data = new RegistrationData();
-        data.setFullName(_fullnameText.getText().toString());
-        data.setEmail(_emailText.getText().toString());
-        data.setMobile(_mobileText.getText().toString());
-        data.setPassword(_passwordText.getText().toString());
-
-        new SignUpTask(URLConstant.URL_REGISTRATION, data).execute();
-
+        signUpService();
     }
 
-
-    public void onSignupSuccess() {
-        _signupButton.setEnabled(true);
-        setResult(RESULT_OK, null);
-        finish();
-    }
-
-    public void onSignupFailed(String message) {
-        Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
-
-        _signupButton.setEnabled(true);
+    public void signUpService() {
+        WebserviceHelper login = new WebserviceHelper(receiver, SignUpActivity.this);
+        login.setAction(Constant.SIGNUP);
+        login.execute();
     }
 
     public boolean validate() {
@@ -110,6 +168,9 @@ public class SignUpActivity extends AppCompatActivity {
         String email = _emailText.getText().toString();
         String mobile = _mobileText.getText().toString();
         String password = _passwordText.getText().toString();
+        String address = _address.getText().toString();
+
+
 
 
         if (name.isEmpty() || name.length() < 3 || name.matches("[A-Za-z0-9_]+")) {
@@ -118,6 +179,7 @@ public class SignUpActivity extends AppCompatActivity {
         } else {
             _fullnameText.setError(null);
         }
+
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             _emailText.setError("enter a valid email address");
             valid = false;
@@ -139,72 +201,27 @@ public class SignUpActivity extends AppCompatActivity {
             _passwordText.setError(null);
         }
 
+        if (address.isEmpty() || address.matches("[A-Za-z0-9_]+")) {
+            _address.setError("Enter address");
+            valid = false;
+        } else {
+            _address.setError(null);
+        }
+
+        Constant.USER_NAME = _fullnameText.getText().toString();
+        Constant.EMAIl= _emailText.getText().toString();
+        Constant.MOBILE = _mobileText.getText().toString();
+        Constant.PASSWORD = _passwordText.getText().toString();
+        Constant.ADDRESS = _address.getText().toString();
 
         return valid;
     }
 
-
-    private class SignUpTask extends AsyncTask<String, String, String> {
-
-        String url;
-        RegistrationData data;
-        ProgressDialog progressDialog;
-
-        SignUpTask(String url, RegistrationData data) {
-            this.data = data;
-            this.url = url;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressDialog = new ProgressDialog(SignUpActivity.this);
-            progressDialog.setIndeterminate(true);
-            progressDialog.setMessage("Creating Account...");
-            progressDialog.show();
-        }
-
-        @Override
-        protected String doInBackground(String[] params) {
-            RequestBody requestBody = getRequestBody();
-            String json = WebServiceUtil.getInstance(getApplicationContext()).getJsonFromPostMethod(url, requestBody);
-            if (json != null) return json;
-
-            return null;
-        }
-
-        @NonNull
-        private RequestBody getRequestBody() {
-            return new FormEncodingBuilder()
-                    .add(AppConstants.FULL_NAME, data.getFullName())
-                    .add(AppConstants.MOBILE, data.getMobile())
-                    .add(AppConstants.EMAIL, data.getEmail())
-                    .add(AppConstants.PASSWORD, data.getPassword())
-                    .build();
-        }
-
-        @Override
-        protected void onPostExecute(String json) {
-            super.onPostExecute(json);
-            if (null != progressDialog && progressDialog.isShowing()) {
-                progressDialog.dismiss();
-            }
-            if (null != json) {
-                Registration registration = new Gson().fromJson(json, Registration.class);
-                if (null != registration) {
-                    if (registration.getSuccess().intValue() == 1) {
-                        onSignupSuccess();
-                    } else if (null != registration.getMessage()) {
-                        onSignupFailed(registration.getMessage());
-                    } else {
-                        onSignupFailed("SignUp Failed");
-                    }
-                } else {
-                    onSignupFailed("SignUp Failed");
-                }
-
-            }
+    @Override
+    public void requestFinished(String[] result) throws Exception {
+        if(result[0].equals("1")){
 
         }
     }
+
 }

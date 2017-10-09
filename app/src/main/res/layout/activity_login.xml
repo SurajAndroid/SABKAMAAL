@@ -44,12 +44,13 @@
                     android:paddingRight="10dp">
 
                     <EditText
+                        android:maxLength="10"
                         android:id="@+id/input_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress"
+                        android:inputType="phone"
                         android:textSize="13dp"
-                        android:hint="EMAIL" />
+                        android:hint="MOBILE NO" />
                 </android.support.design.widget.TextInputLayout>
                 <android.widget.ImageView
                     android:layout_height="20dp"

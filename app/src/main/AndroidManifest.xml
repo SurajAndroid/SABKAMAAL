@@ -25,8 +25,8 @@
         <activity android:name=".activity.SignUpActivity" />
         <activity android:name=".activity.ForgotPasswordActivity" />
         <activity android:name=".activity.ProductActivity" />
-
         <activity android:name=".activity.ProductDetail" />
+        <activity android:name=".activity.HistoryActivity" />
     </application>
 
 </manifest>

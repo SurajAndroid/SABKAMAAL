@@ -6,7 +6,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.view.inputmethod.InputMethodManager;
 
+import com.smt.sabkamaal.dto.HistoryDTO;
 import com.smt.sabkamaal.dto.ProductDTO;
+import com.smt.sabkamaal.dto.ProfileDTO;
 
 import java.util.ArrayList;
 
@@ -19,6 +21,10 @@ public class AppUtils {
     private static AppUtils _instance;
     private static Context context;
     public static ArrayList<ProductDTO> productList = new ArrayList<>();
+
+    public static ArrayList<ProfileDTO> profileList = new ArrayList<>();
+    public static ArrayList<HistoryDTO> historyList = new ArrayList<>();
+
 
     private AppUtils() {
     }

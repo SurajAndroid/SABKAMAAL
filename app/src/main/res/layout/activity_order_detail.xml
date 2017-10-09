@@ -334,7 +334,7 @@
                     android:layout_width="0sp"
                     android:textColor="@color/textcolor"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:paddingLeft="10sp"
                     android:textStyle="bold"
                     android:textSize="16dp"
                     android:text="Name"

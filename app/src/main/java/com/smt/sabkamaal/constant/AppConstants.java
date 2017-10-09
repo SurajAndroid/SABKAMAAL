@@ -11,4 +11,5 @@ public interface AppConstants {
     String MOBILE = "mobile";
     String OLD_PASSWORD = "old_password";
     String NEW_PASSWORD = "new_password";
+    String CAT_ID = "cat_id";
 }

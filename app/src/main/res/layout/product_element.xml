@@ -5,8 +5,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_marginRight="2sp"
-        android:layout_marginBottom="2sp"
+        android:layout_margin="2sp"
         android:background="@drawable/shadow"
         android:padding="5sp"
         android:orientation="vertical"
@@ -22,6 +21,7 @@
             android:layout_width="50sp"
             android:layout_height="50sp"
             android:scaleType="centerCrop"
+            android:src="@drawable/book"
             android:id="@+id/productImage" />
 
         <TextView
@@ -29,83 +29,114 @@
             android:layout_marginTop="5sp"
             android:textColor="@color/textcolor"
             android:textSize="@dimen/minismall_text"
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/productName" />
+            android:id="@+id/productName"
+            android:text="SugurCone"/>
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40sp">
         <TextView
             android:singleLine="true"
             android:layout_marginTop="5sp"
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/minismall_text"
-
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/priceTxt" />
-        
+            android:layout_gravity="center"
+            android:id="@+id/priceTxt"
+            android:text="Rs 100"/>
+        <LinearLayout
+            android:layout_marginTop="5sp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_width="0sp"
+            android:layout_height="match_parent">
+
+            <EditText
+
+                android:textSize="10dp"
+                android:hint="qty"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/editText"
+                />
+
+            <View
+                android:visibility="gone"
+                android:background="@color/linecolor"
+                android:layout_width="match_parent"
+                android:layout_height="0.2sp"/>
+
+        </LinearLayout>
+        </LinearLayout>
+
         <LinearLayout
             android:layout_marginTop="5sp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="40sp">
+            android:layout_height="25sp">
+
+            <!--<LinearLayout-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_width="0sp"-->
+                <!--android:layout_height="match_parent">-->
+
+                <!--<EditText-->
+                    <!--android:textSize="@dimen/minismall_text"-->
+                    <!--android:hint="qty"-->
+                    <!--android:gravity="center"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:inputType="number"-->
+                    <!--android:ems="10"-->
+                    <!--android:id="@+id/editText"-->
+                    <!--/>-->
+
+                <!--<View-->
+                    <!--android:visibility="gone"-->
+                    <!--android:background="@color/textcolor"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="1sp"/>-->
+
+            <!--</LinearLayout>-->
 
             <LinearLayout
-                android:orientation="vertical"
-                android:layout_weight="1"
-                android:layout_width="0sp"
-                android:layout_height="match_parent">
 
-                <EditText
-                    android:textSize="@dimen/minismall_text"
-                    android:hint="qty"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:ems="10"
-                    android:id="@+id/editText"
-                    />
-
-                <View
-                    android:visibility="gone"
-                    android:background="@color/textcolor"
-                    android:layout_width="match_parent"
-                    android:layout_height="1sp"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:gravity="center"
                 android:orientation="horizontal"
                 android:layout_weight="1"
                 android:layout_width="0sp"
-                android:layout_height="match_parent" >
+                android:layout_height="25dp" >
 
                 <TextView
                     android:id="@+id/hoardvalue"
                     android:text="Rs.0.0"
                     android:singleLine="true"
-                    android:gravity="right"
+                    android:gravity="left|center"
                     android:textColor="@color/textcolor"
                     android:textSize="@dimen/minismall_text"
-
+                    android:layout_gravity="left|center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     />
 
                 <TextView
                     android:singleLine="true"
-                    android:gravity="right"
+                    android:gravity="left|center"
                     android:textColor="@color/textcolor"
                     android:textSize="@dimen/minismall_text"
-
+                    android:layout_gravity="left|center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/total_priceTxt" />
 
             </LinearLayout>
-
 
 
         </LinearLayout>

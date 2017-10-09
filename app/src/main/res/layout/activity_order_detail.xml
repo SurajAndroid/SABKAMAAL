@@ -20,6 +20,9 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true">
 
+
+
+
             <TableRow
                 android:id="@+id/tableRow2"
                 android:layout_width="wrap_content"
@@ -34,12 +37,23 @@
                     android:paddingTop="4dp"
                     android:textStyle="bold"
                     android:textSize="16dp"
-                    android:text="Order No:" />
+                    android:textColor="@color/textcolor"
+                    android:text="Order No" />
+
+                <TextView
+                    android:textColor="@color/textcolor"
+                    android:layout_width="wrap_content"
+                    android:gravity="left"
+                    android:paddingTop="4dp"
+                    android:textStyle="bold"
+                    android:textSize="16dp"
+                    android:text=":" />
 
                 <TextView
                     android:id="@+id/tv_order_no"
                     android:layout_width="0dp"
                     android:textSize="16dp"
+                    android:textColor="@color/textcolor"
                     android:layout_weight="1"
                     android:gravity="left"
                     android:paddingTop="4dp"
@@ -60,13 +74,23 @@
                     android:paddingTop="4dp"
                     android:textStyle="bold"
                     android:textSize="16dp"
-                    android:text="Customer Name:" />
+                    android:textColor="@color/textcolor"
+                    android:text="Customer Name" />
+                <TextView
+                    android:textColor="@color/textcolor"
+                    android:layout_width="wrap_content"
+                    android:gravity="left"
+                    android:paddingTop="4dp"
+                    android:textStyle="bold"
+                    android:textSize="16dp"
+                    android:text=":" />
 
                 <TextView
                     android:id="@+id/tv_customer_name"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:gravity="left"
+                    android:textColor="@color/textcolor"
                     android:paddingTop="4dp"
                     android:textSize="16dp"
                     android:text="" />
@@ -85,12 +109,22 @@
                     android:paddingTop="4dp"
                     android:textStyle="bold"
                     android:textSize="16dp"
+                    android:textColor="@color/textcolor"
                     android:text="Order Date" />
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:gravity="left"
+                    android:paddingTop="4dp"
+                    android:textStyle="bold"
+                    android:textSize="16dp"
+                    android:text=":" />
 
                 <TextView
                     android:id="@+id/tv_order_date"
                     android:textSize="16dp"
                     android:layout_width="0dp"
+                    android:textColor="@color/textcolor"
                     android:layout_weight="1"
                     android:gravity="left"
                     android:paddingTop="4dp"
@@ -111,17 +145,26 @@
                     android:paddingTop="4dp"
                     android:textStyle="bold"
                     android:textSize="16dp"
-                    android:text="Transport Detail:"
+                    android:textColor="@color/textcolor"
+                    android:text="Transport Detail"
                     />
-
+                <TextView
+                    android:textColor="@color/textcolor"
+                    android:layout_width="wrap_content"
+                    android:gravity="left"
+                    android:paddingTop="4dp"
+                    android:textStyle="bold"
+                    android:textSize="16dp"
+                    android:text=":" />
                 <TextView
                     android:id="@+id/tv_transport_detail"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:gravity="left"
                     android:paddingTop="4dp"
+                    android:textColor="@color/textcolor"
                     android:textSize="16dp"
-                    android:text="" />
+                    android:text="----" />
             </TableRow>
 
             <TableRow
@@ -137,7 +180,16 @@
                     android:paddingTop="4dp"
                     android:textStyle="bold"
                     android:textSize="16dp"
+                    android:textColor="@color/textcolor"
                     android:text="Dispatch Date" />
+                <TextView
+                    android:textColor="@color/textcolor"
+                    android:layout_width="wrap_content"
+                    android:gravity="left"
+                    android:paddingTop="4dp"
+                    android:textStyle="bold"
+                    android:textSize="16dp"
+                    android:text=":" />
 
                 <TextView
                     android:id="@+id/tv_dispatch_date"
@@ -146,7 +198,8 @@
                     android:gravity="left"
                     android:textSize="16dp"
                     android:paddingTop="4dp"
-                    android:text="" />
+                    android:textColor="@color/textcolor"
+                    android:text="----" />
             </TableRow>
 
 
@@ -162,8 +215,17 @@
                     android:gravity="left"
                     android:paddingTop="4dp"
                     android:textStyle="bold"
+                    android:textColor="@color/textcolor"
                     android:textSize="16dp"
                     android:text="Other" />
+                <TextView
+                    android:textColor="@color/textcolor"
+                    android:layout_width="wrap_content"
+                    android:gravity="left"
+                    android:paddingTop="4dp"
+                    android:textStyle="bold"
+                    android:textSize="16dp"
+                    android:text=":" />
 
                 <TextView
                     android:id="@+id/tv_other"
@@ -171,9 +233,11 @@
                     android:layout_weight="1"
                     android:textSize="16dp"
                     android:gravity="left"
+                    android:textColor="@color/textcolor"
                     android:paddingTop="4dp"
-                    android:text="" />
+                    android:text="dummy order test" />
             </TableRow>
+
 
             <TableRow
                 android:id="@+id/tableRow_line2"
@@ -236,7 +300,27 @@
                     android:layout_span="8">
                 </TextView>
             </TableRow>
+            <TableRow
+                android:id="@+id/tableRow_line3"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:textColor="@color/colorAccent"
+                android:gravity="center_horizontal">
 
+
+                <TextView
+                    android:id="@+id/textView_line3"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:textColor="@color/colorAccent"
+                    android:background="@color/colorAccent"
+                    android:typeface="serif"
+                    android:gravity="center"
+                    android:layout_span="8"
+                    android:layout_marginBottom="10dp"
+                    >
+                </TextView>
+            </TableRow>
             <TableRow
                 android:id="@+id/tableRow10"
                 android:layout_width="wrap_content"
@@ -248,6 +332,7 @@
                     android:id="@+id/name"
                     android:layout_weight="1"
                     android:layout_width="0sp"
+                    android:textColor="@color/textcolor"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textStyle="bold"
@@ -260,6 +345,7 @@
                     android:layout_weight="1"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/textcolor"
                     android:gravity="center"
                     android:textStyle="bold"
                     android:textSize="16dp"
@@ -270,6 +356,7 @@
                     android:layout_weight="1"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/textcolor"
                     android:gravity="center"
                     android:textStyle="bold"
                     android:textSize="16dp"
@@ -280,6 +367,7 @@
                     android:layout_weight="1"
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/textcolor"
                     android:gravity="center"
                     android:textStyle="bold"
                     android:textSize="16dp"

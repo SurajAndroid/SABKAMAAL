@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
+import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,15 +26,19 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.smt.sabkamaal.R;
 import com.smt.sabkamaal.adapter.AllProductAdapter;
+import com.smt.sabkamaal.adapter.ImageSliderAdapter;
 import com.smt.sabkamaal.adapter.ProductGridAdapter;
 import com.smt.sabkamaal.constant.AppConstants;
 import com.smt.sabkamaal.constant.Productlist;
 import com.smt.sabkamaal.constant.URLConstant;
 import com.smt.sabkamaal.dto.ProductDTO;
+import com.smt.sabkamaal.holder.CategoryWiseProduct;
 import com.smt.sabkamaal.holder.ProductCategory;
 import com.smt.sabkamaal.holder.ProductCategoryData;
 import com.smt.sabkamaal.util.AppUtils;
 import com.smt.sabkamaal.webService.WebServiceUtil;
+import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.RequestBody;
 
 
 import org.json.JSONArray;
@@ -50,26 +57,37 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import me.relex.circleindicator.CircleIndicator;
 
 public class ProductActivity extends AppCompatActivity {
 
     private AllProductAdapter mAdapter;
     private ProductGridAdapter productGridAdapter;
     GridView  product_grid;
-    Spinner materialBetterSpinner ;
-    String myJSON,catid;
-    ArrayList<String> statelist;
+    Spinner category;
+    String myJSON;
+    ArrayList<String> categorylist;
     ImageView proceedBtn;
-
+    ProgressDialog progressDialog;
+    ProductDTO productDTO = null;
+    private static ViewPager mPager;
+    private static int currentPage = 0;
+    private static final Integer[] XMEN= {R.drawable.image_slide5,R.drawable.image_slide2,R.drawable.imageslid3,R.drawable.image_slide4,R.drawable.image_slide5};
+    private ArrayList<Integer> XMENArray = new ArrayList<Integer>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity);
-
+        init();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        materialBetterSpinner = (Spinner) findViewById(R.id.material_spinner1);
+        progressDialog = new ProgressDialog(ProductActivity.this);
+        category = (Spinner) findViewById(R.id.material_spinner1);
+        productDTO = new ProductDTO();
         proceedBtn = (ImageView) findViewById(R.id.proceedBtn);
         product_grid = (GridView)findViewById(R.id.product_grid);
 
@@ -86,11 +104,38 @@ public class ProductActivity extends AppCompatActivity {
 
         if (AppUtils.getInstance(ProductActivity.this).isNetworkConnected()) {
             fetchCategoryFromServer();
-            getTechnicalUpdate();
+            getallproduct();
         } else {
             Toast.makeText(ProductActivity.this, "Please connect to internet to continue!", Toast.LENGTH_LONG).show();
         }
 
+    }
+    private void init() {
+        for(int i=0;i<XMEN.length;i++)
+            XMENArray.add(XMEN[i]);
+
+        mPager = (ViewPager) findViewById(R.id.pager);
+        mPager.setAdapter(new ImageSliderAdapter(ProductActivity.this,XMENArray));
+        CircleIndicator indicator = (CircleIndicator) findViewById(R.id.indicator);
+        indicator.setViewPager(mPager);
+
+        // Auto start of viewpager
+        final Handler handler = new Handler();
+        final Runnable Update = new Runnable() {
+            public void run() {
+                if (currentPage == XMEN.length) {
+                    currentPage = 0;
+                }
+                mPager.setCurrentItem(currentPage++, true);
+            }
+        };
+        Timer swipeTimer = new Timer();
+        swipeTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(Update);
+            }
+        }, 2500, 2500);
     }
     public void fetchCategoryFromServer() {
 
@@ -99,79 +144,90 @@ public class ProductActivity extends AppCompatActivity {
 
 
 
-    class FetchCategoryTask extends AsyncTask<Void, Void, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-        @Override
-        protected String doInBackground(Void... params) {
-            try {
-                String json = WebServiceUtil.getInstance(getApplicationContext()).getJsonFromGetMethod(URLConstant.URL_CATEGORY);
-                if (json != null) {
-                    return json;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+
+class FetchCategoryTask extends AsyncTask<Void, Void, String> {
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+
+    }
+
+    @Override
+    protected String doInBackground(Void... params) {
+
+        try {
+            String json = WebServiceUtil.getInstance(getApplicationContext()).getJsonFromGetMethod(URLConstant.URL_CATEGORY);
+            if (json != null) {
+                return json;
             }
-            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
+        return null;
+    }
 
 
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
 
+    @Override
+    protected void onPostExecute(String result) {
+        super.onPostExecute(result);
 
-            if (null != result) {
-                try {
-
-                    final ProductCategory stateHolder = new Gson().fromJson(result, ProductCategory.class);
-                    if (null != stateHolder && stateHolder.getSuccess() == 1) {
-                        Log.d("StateHolder", "" + stateHolder.toString());
-                        statelist = new ArrayList<>();
-                        for (ProductCategoryData stateDeatailHolder : stateHolder.getData()) {
-                            if (!stateDeatailHolder.getCategoryName().isEmpty()) {
-                                statelist.add(stateDeatailHolder.getCategoryName());
-                            }
+        if (null != result) {
+            try {
+                final ProductCategory productCategory = new Gson().fromJson(result, ProductCategory.class);
+                if (null != productCategory && productCategory.getSuccess() == 1) {
+                    Log.d("StateHolder", "" + productCategory.toString());
+                    categorylist = new ArrayList<>();
+                    categorylist.add(0, "All Categories");
+                    for (ProductCategoryData productCategoryData : productCategory.getData()) {
+                        if (!productCategoryData.getCategoryName().isEmpty()) {
+                            categorylist.add(productCategoryData.getCategoryName());
                         }
-                        if (statelist.size() > 0) {
-                            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(ProductActivity.this,android.R.layout.simple_dropdown_item_1line, statelist);
-                            Log.d("onItemSelected", "setAdapter for state");
-                            materialBetterSpinner.setAdapter(arrayAdapter);
-                            materialBetterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                @Override
-                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                    if (parent.getId() == R.id.material_spinner1){
-                                        getproductcategorywise();
-                                    }
-                                }
-
-                                @Override
-                                public void onNothingSelected(AdapterView<?> parent) {
-                                }
-                            });
-
-                        }
-
-                    } else {
-                        Toast.makeText(ProductActivity.this, "Something not right", Toast.LENGTH_SHORT).show();
                     }
-                } catch (JsonSyntaxException e) {
-                    e.printStackTrace();
+
+                    if (categorylist.size() > 0) {
+                        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(ProductActivity.this, android.R.layout.simple_list_item_1, categorylist);
+                        Log.d("onItemSelected", "setAdapter for state");
+                        category.setAdapter(arrayAdapter);
+                        category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                                if (position != 0) {
+                                    getproductcategorywise(position);
+                                } else {
+                                    getallproduct();
+                                }
+
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+
+                    }
+
+                } else {
                     Toast.makeText(ProductActivity.this, "Something not right", Toast.LENGTH_SHORT).show();
                 }
-            } else {
+            } catch (JsonSyntaxException e) {
+                e.printStackTrace();
                 Toast.makeText(ProductActivity.this, "Something not right", Toast.LENGTH_SHORT).show();
             }
+        } else {
+            Toast.makeText(ProductActivity.this, "Something not right", Toast.LENGTH_SHORT).show();
         }
     }
-    private void getTechnicalUpdate() {
-        final ProgressDialog loading = ProgressDialog.show(ProductActivity.this, "Getting Details", "Please wait", false, false);
+}
 
-        class TechnicalUpdateTask extends AsyncTask<String, Void, String> {
+    private void getallproduct() {
+        final ProgressDialog loading = ProgressDialog.show(ProductActivity.this, "Getting Details", "Please wait", false, false);
+        class AllProductTask extends AsyncTask<String, Void, String> {
             public void onPreExecute() {
+
             }
 
             @Override
@@ -185,6 +241,7 @@ public class ProductActivity extends AppCompatActivity {
                     editor.apply();
 
                     URL url = new URL(URLConstant.URL_ALLPRODUCT);
+
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setReadTimeout(15000 /* milliseconds */);
                     conn.setConnectTimeout(15000 /* milliseconds */);
@@ -197,13 +254,14 @@ public class ProductActivity extends AppCompatActivity {
                     writer.close();
                     os.close();
 
-                    int responseCode=conn.getResponseCode();
+                    int responseCode = conn.getResponseCode();
+
                     if (responseCode == HttpsURLConnection.HTTP_OK) {
-                        BufferedReader in=new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+                        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                         StringBuilder sb = new StringBuilder("");
-                        String line="";
-                        while ((line = in.readLine()) != null)
-                        {
+                        String line = "";
+                        while ((line = in.readLine()) != null) {
                             sb.append(line).append("\n");
                         }
                         result = sb.toString();
@@ -214,39 +272,42 @@ public class ProductActivity extends AppCompatActivity {
                     StringBuilder sb = new StringBuilder();
 
                     String line = null;
-                    while ((line = reader.readLine()) != null)
-                    {
+                    while ((line = reader.readLine()) != null) {
                         sb.append(line).append("\n");
                     }
                     result = sb.toString();
                 } catch (Exception e) {
-                    Log.i("tagconvertstr", "["+result+"]");
+                    Log.i("tagconvertstr", "[" + result + "]");
                     System.out.println(e);
-                }
-                finally {
-                    try{if(inputStream != null)inputStream.close();}catch(Exception squish){}
+                } finally {
+                    try {
+                        if (inputStream != null) inputStream.close();
+                    } catch (Exception squish) {
+                    }
                 }
                 return result;
+
             }
 
             @Override
-            protected void onPostExecute(String result){
+            protected void onPostExecute(String result) {
                 loading.dismiss();
                 myJSON = result;
                 detail();
+
             }
+
+
         }
-        TechnicalUpdateTask g = new TechnicalUpdateTask();
+        AllProductTask g = new AllProductTask();
         g.execute();
     }
 
+    public void detail() {
 
-    public void detail(){
 
-        List<Productlist> technicaldata =new ArrayList<>();
-        technicaldata.clear();
         JSONObject json_data = null;
-        ProductDTO productDTO = null;
+
         AppUtils.productList.clear();
         try {
             JSONObject jsonObj = new JSONObject(myJSON);
@@ -275,88 +336,114 @@ public class ProductActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-          private void getproductcategorywise(){
-              final ProgressDialog loading = ProgressDialog.show(ProductActivity.this, "Getting Details", "Please wait", false, false);
+    private void getproductcategorywise(int position) {
+        new CategoryWiseProductTask(URLConstant.URL_CATEGORYWISE, position).execute();
+    }
 
-              class TechnicalUpdateTask extends AsyncTask<String, Void, String> {
-                  public void onPreExecute() {
-                  }
+    public void onCategorywiseProduct(String categoryWiseProduct) {
 
-                  @Override
-                  protected String doInBackground(String... params) {
+        JSONObject json_data = null;
 
-                      InputStream inputStream = null;
-                      String result = null;
-                      try {
-                          SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
-                          SharedPreferences.Editor editor = pref.edit();
-                          editor.apply();
+        AppUtils.productList.clear();
+        try {
+            JSONObject jsonObj = new JSONObject(categoryWiseProduct);
+            JSONArray jArray = jsonObj.getJSONArray("data");
+            Log.d("jarray",jArray.toString());
+            for(int i=0; i<jArray.length(); i++){
+                json_data = jArray.getJSONObject(i);
+                productDTO = new ProductDTO();
 
-                          URL url = new URL(URLConstant.URL_CATEGORYWISE);
+                productDTO.setId(json_data.getString("id"));
+                productDTO.setCat_id(json_data.getString("cat_id"));
+                productDTO.setProduct_name(json_data.getString("product_name"));
+                productDTO.setProduct_image(json_data.getString("product_image"));
+                productDTO.setPrice(json_data.getString("price"));
+                productDTO.setQuantity(json_data.getString("quantity"));
+                productDTO.setDiscription(json_data.getString("discription"));
+                productDTO.setCustomer_quantity("");
 
-                          HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                          conn.setReadTimeout(15000 /* milliseconds */);
-                          conn.setConnectTimeout(15000 /* milliseconds */);
-                          conn.setRequestMethod("POST");
-                          conn.addRequestProperty("cat_id","4");
-                          conn.setDoInput(true);
-                          conn.setDoOutput(true);
-                          OutputStream os = conn.getOutputStream();
+                AppUtils.productList.add(productDTO);
+            }
 
-                          BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-                         /* BufferedWriter writer = new BufferedWriter(
-                                  new OutputStreamWriter(os, "UTF-8"));
-                          writer.write(getPostDataString(postDataParams));*/
+            productGridAdapter = new ProductGridAdapter(ProductActivity.this,ProductActivity.this, AppUtils.productList);
+            product_grid.setAdapter(productGridAdapter);
 
-                          writer.flush();
-                          writer.close();
-                          os.close();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    public void onFailed(String message) {
+        Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
+    }
+    private class CategoryWiseProductTask extends AsyncTask<String, String, String> {
+        String url;
+        int position;
 
-                          int responseCode=conn.getResponseCode();
+        CategoryWiseProductTask(String url, int position) {
+            this.url = url;
+            this.position = position;
+        }
 
-                          if (responseCode == HttpsURLConnection.HTTP_OK) {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Fetching Product...");
+            progressDialog.show();
+        }
 
-                              BufferedReader in=new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                              StringBuilder sb = new StringBuilder("");
-                              String line="";
-                              while ((line = in.readLine()) != null)
-                              {
-                                  sb.append(line).append("\n");
-                              }
-                              result = sb.toString();
-                          }
+        @Override
+        protected String doInBackground(String[] params) {
+            RequestBody requestBody = getRequestBody();
+            try {
+                String json = WebServiceUtil.getInstance(getApplicationContext()).getJsonFromPostMethod(url, requestBody);
+                if (json != null) {
+                    return json;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-                          assert inputStream != null;
-                          BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
-                          StringBuilder sb = new StringBuilder();
+            return null;
+        }
 
-                          String line = null;
-                          while ((line = reader.readLine()) != null)
-                          {
-                              sb.append(line).append("\n");
-                          }
-                          result = sb.toString();
-                      } catch (Exception e) {
-                          Log.i("tagconvertstr", "["+result+"]");
-                          System.out.println(e);
-                      }
-                      finally {
-                          try{if(inputStream != null)inputStream.close();}catch(Exception squish){}
-                      }
-                      return result;
+        @NonNull
+        private RequestBody getRequestBody() {
+            return new FormEncodingBuilder()
+                    .add(AppConstants.CAT_ID, String.valueOf(position))
+                    .build();
+        }
 
-                  }
+        @Override
+        protected void onPostExecute(String json) {
+            super.onPostExecute(json);
+            try {
+                if (null != progressDialog && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+                if (null != json) {
+                    CategoryWiseProduct categoryWiseProduct = new Gson().fromJson(json, CategoryWiseProduct.class);
+                    if (null != categoryWiseProduct) {
+                        if (categoryWiseProduct.getSuccess().intValue() == 1) {
+                            onCategorywiseProduct(json);
+                        } else if (null != categoryWiseProduct.getMessage()) {
+                            onFailed(categoryWiseProduct.getMessage());
+                        } else {
+                            onFailed("Something went wrong");
+                        }
+                    } else {
+                        onFailed("Something went wrong!");
+                    }
 
-                  @Override
-                  protected void onPostExecute(String result){
-                      loading.dismiss();
-                      myJSON = result;
-//                      detail1();
-                  }
-              }
-              TechnicalUpdateTask g = new TechnicalUpdateTask();
-              g.execute();
-          }
+                }
+            } catch (JsonSyntaxException e) {
+                e.printStackTrace();
+                onFailed("Something went wrong!");
+
+            }
+        }
+    }
+
 
     public String getPostDataString(JSONObject params) throws Exception {
 
@@ -383,41 +470,5 @@ public class ProductActivity extends AppCompatActivity {
         return result.toString();
     }
 
-  /*  public void detail1(){
 
-        List<Productlist> technicaldata =new ArrayList<>();
-        technicaldata.clear();
-        try {
-            JSONObject jsonObj = new JSONObject(myJSON);
-//
-//                    // Getting JSON Array node
-//                    JSONArray data = jsonObj.getJSONArray("data");
-            JSONArray jArray = jsonObj.getJSONArray("data");
-            Log.d("jarray",jArray.toString());
-            for(int i=0; i<jArray.length(); i++){
-                JSONObject json_data = jArray.getJSONObject(i);
-                Log.d("jsondata",json_data.toString());
-                Productlist fishData = new Productlist();
-                fishData.product_name = json_data.getString("product_name");
-
-                fishData.price = json_data.getString("price");
-
-                String img= json_data.getString("product_image");
-                String[] gmi = img.split(",");
-                fishData.product_image = gmi[0];
-                // fishData.blogs_desc = json_data.getString("blogs_desc");
-                Log.d("fishdata",fishData.toString());
-                technicaldata.add(fishData);
-            }
-            recyclerView=(RecyclerView)findViewById(R.id.my_recycler_view);
-            recyclerView.setHasFixedSize(true);
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-            recyclerView.setLayoutManager(layoutManager);
-            mAdapter=new AllProductAdapter(getApplicationContext(),technicaldata);
-            recyclerView.setAdapter(mAdapter);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }*/
 }

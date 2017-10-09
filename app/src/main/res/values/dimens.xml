@@ -10,5 +10,5 @@
     <dimen name="large_text">20dp</dimen>
     <dimen name="medeum_text">18dp</dimen>
     <dimen name="small_text">16dp</dimen>
-    <dimen name="minismall_text">10dp</dimen>
+    <dimen name="minismall_text">12dp</dimen>
 </resources>

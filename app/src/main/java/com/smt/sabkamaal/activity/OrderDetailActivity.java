@@ -182,7 +182,7 @@ public class OrderDetailActivity extends AppCompatActivity implements RequestRec
     public void requestFinished(String[] result) throws Exception {
         if(result[0].equals("1")){
             AlertDialog.Builder builder1 = new AlertDialog.Builder(OrderDetailActivity.this);
-            builder1.setMessage("Order Recived. \nThank you.!");
+            builder1.setMessage("Order Received. \nThank you.!");
             builder1.setCancelable(true);
 
             builder1.setPositiveButton(

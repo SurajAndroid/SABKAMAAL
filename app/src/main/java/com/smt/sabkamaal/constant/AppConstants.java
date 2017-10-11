@@ -9,7 +9,8 @@ public interface AppConstants {
     String PASSWORD = "password";
     String FULL_NAME = "full_name";
     String MOBILE = "mobile";
-    String OLD_PASSWORD = "old_password";
-    String NEW_PASSWORD = "new_password";
+    String ADDRESS = "address";
+    String GUMASTA = "gumasta";
+    String ADHAAR = "adhaar";
     String CAT_ID = "cat_id";
 }

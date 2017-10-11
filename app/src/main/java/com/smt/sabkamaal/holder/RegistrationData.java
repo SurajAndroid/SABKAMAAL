@@ -17,6 +17,39 @@ public class RegistrationData {
     private String mUserId;
     @SerializedName("password")
     private String mPassword;
+       @SerializedName("address")
+    private String mAddress;
+    @SerializedName("gumasta")
+    private String mGumastaImage;
+    @SerializedName("adhaar")
+    private String mAdhaarImage;
+
+    public String getmGumastaImage() {
+        return mGumastaImage;
+    }
+
+    public void setmGumastaImage(String mGumastaImage) {
+        this.mGumastaImage = mGumastaImage;
+    }
+
+    public String getmAdhaarImage() {
+        return mAdhaarImage;
+    }
+
+    public void setmAdhaarImage(String mAdhaarImage) {
+        this.mAdhaarImage = mAdhaarImage;
+    }
+
+
+
+    public String getAddress() {
+        return mAddress;
+    }
+
+    public void setAddress(String mAddress) {
+        this.mAddress = mAddress;
+    }
+
 
     public String getPassword() {
         return mPassword;

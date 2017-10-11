@@ -21,6 +21,7 @@ public class AppUtils {
     private static AppUtils _instance;
     private static Context context;
     public static ArrayList<ProductDTO> productList = new ArrayList<>();
+    public static ArrayList<ProductDTO> productOrderList = new ArrayList<>();
 
     public static ArrayList<ProfileDTO> profileList = new ArrayList<>();
     public static ArrayList<HistoryDTO> historyList = new ArrayList<>();

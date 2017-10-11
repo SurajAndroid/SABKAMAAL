@@ -58,7 +58,7 @@
                     android:layout_marginRight="20dp"
                     android:tint="@color/iconcolor"
                     android:layout_gravity="right|center_vertical"
-                    android:src="@drawable/ic_mail_outline_black_24dp">
+                    android:src="@drawable/ic_phone_black_24dp">
                 </android.widget.ImageView>
             </FrameLayout>
 

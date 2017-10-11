@@ -27,9 +27,23 @@
 
 
             <TextView
-                android:id="@+id/rateUsTxt"
+                android:id="@+id/homeTxt"
                 android:padding="10sp"
                 android:layout_marginTop="20sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Home"
+                android:textStyle="normal"
+                android:textColor="@color/textcolor"
+                android:textSize="@dimen/medeum_text"
+                android:layout_gravity="center">
+            </TextView>
+
+
+            <TextView
+                android:id="@+id/rateUsTxt"
+                android:padding="10sp"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Rate Us"
@@ -53,6 +67,7 @@
 
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/offerTxt"
                 android:padding="10sp"
                 android:layout_width="match_parent"
@@ -65,6 +80,7 @@
             </TextView>
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/rewardTxt"
                 android:padding="10sp"
                 android:layout_width="match_parent"

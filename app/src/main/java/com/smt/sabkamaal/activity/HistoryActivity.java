@@ -74,10 +74,9 @@ public class HistoryActivity extends AppCompatActivity implements RequestReceive
     RequestReceiver receiver;
     DrawerLayout drawer_layout;
     LinearLayout slidMenuLayout;
-    TextView rateUsTxt, offerTxt, rewardTxt, termsTxt, logoutTxt, orderHistoryTxt;
+    TextView rateUsTxt, offerTxt, rewardTxt, termsTxt, logoutTxt, orderHistoryTxt, homeTxt;
     SharedPreferences sharedPreferences;
     ListView history_list;
-
     OrderHistoryAdapter orderHistoryAdapter ;
 
     @Override
@@ -92,15 +91,22 @@ public class HistoryActivity extends AppCompatActivity implements RequestReceive
         } else {
             Toast.makeText(HistoryActivity.this, "Please connect to internet to continue!", Toast.LENGTH_LONG).show();
         }
-
     }
-
 
     public void loginService() {
         WebserviceHelper history = new WebserviceHelper(receiver, HistoryActivity.this);
         history.setAction(Constant.HISTORY);
         history.execute();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(HistoryActivity.this, ProductActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
     private void init() {
         receiver = this;
         sharedPreferences = this.getSharedPreferences("login_status", Context.MODE_PRIVATE);
@@ -112,6 +118,7 @@ public class HistoryActivity extends AppCompatActivity implements RequestReceive
         termsTxt = (TextView)findViewById(R.id.termsTxt);
         logoutTxt = (TextView)findViewById(R.id.logoutTxt);
         orderHistoryTxt = (TextView)findViewById(R.id.orderHistoryTxt);
+        homeTxt = (TextView)findViewById(R.id.homeTxt);
 
         slidMenuLayout = (LinearLayout)findViewById(R.id.slidMenuLayout);
         drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -125,6 +132,15 @@ public class HistoryActivity extends AppCompatActivity implements RequestReceive
             }
         });
 
+        homeTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer_layout.closeDrawers();
+                Intent intent = new Intent(HistoryActivity.this, ProductActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
 
         rateUsTxt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,7 +190,6 @@ public class HistoryActivity extends AppCompatActivity implements RequestReceive
 
             }
         });
-
     }
 
     @Override

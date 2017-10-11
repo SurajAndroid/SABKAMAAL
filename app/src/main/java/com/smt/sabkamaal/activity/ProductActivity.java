@@ -87,7 +87,7 @@ public class ProductActivity extends AppCompatActivity {
 
     DrawerLayout drawer_layout;
     LinearLayout slidMenuLayout;
-    TextView rateUsTxt, offerTxt, rewardTxt, termsTxt, logoutTxt, orderHistoryTxt;
+    TextView rateUsTxt, offerTxt, rewardTxt, termsTxt, logoutTxt, orderHistoryTxt, homeTxt;
     SharedPreferences sharedPreferences;
 
 
@@ -111,6 +111,17 @@ public class ProductActivity extends AppCompatActivity {
                 startActivity(intent);
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 
+               for(int i=0;i<AppUtils.productList.size();i++){
+                   if(AppUtils.productList.get(i).getCustomer_quantity().equals("0")){
+
+                        if(AppUtils.productOrderList.contains(AppUtils.productList.get(i).getProduct_name())){
+                            AppUtils.productOrderList.add(AppUtils.productList.get(i));
+                            Log.e("",""+AppUtils.productList.get(i).getProduct_name());
+                        }
+                   }
+               }
+
+
             }
         });
 
@@ -122,6 +133,10 @@ public class ProductActivity extends AppCompatActivity {
         }
 
     }
+
+
+
+
     private void init() {
         sharedPreferences = this.getSharedPreferences("login_status", Context.MODE_PRIVATE);
         rateUsTxt = (TextView)findViewById(R.id.rateUsTxt);
@@ -130,6 +145,7 @@ public class ProductActivity extends AppCompatActivity {
         termsTxt = (TextView)findViewById(R.id.termsTxt);
         logoutTxt = (TextView)findViewById(R.id.logoutTxt);
         orderHistoryTxt = (TextView)findViewById(R.id.orderHistoryTxt);
+        homeTxt = (TextView)findViewById(R.id.homeTxt);
 
         slidMenuLayout = (LinearLayout)findViewById(R.id.slidMenuLayout);
         drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -158,7 +174,7 @@ public class ProductActivity extends AppCompatActivity {
             public void run() {
                 handler.post(Update);
             }
-        }, 2500, 2500);
+        }, 3500, 3500);
 
 
         /*Click Listener*/
@@ -170,16 +186,25 @@ public class ProductActivity extends AppCompatActivity {
         });
 
 
-        rateUsTxt.setOnClickListener(new View.OnClickListener() {
+        homeTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 drawer_layout.closeDrawers();
             }
         });
 
+        rateUsTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer_layout.closeDrawers();
+                Toast.makeText(getApplicationContext(),"Coming Soon",Toast.LENGTH_SHORT).show();
+            }
+        });
+
         offerTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Toast.makeText(getApplicationContext(),"Coming Soon",Toast.LENGTH_SHORT).show();
                 drawer_layout.closeDrawers();
             }
         });
@@ -187,6 +212,7 @@ public class ProductActivity extends AppCompatActivity {
         rewardTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Toast.makeText(getApplicationContext(),"Coming Soon",Toast.LENGTH_SHORT).show();
                 drawer_layout.closeDrawers();
             }
         });
@@ -194,6 +220,7 @@ public class ProductActivity extends AppCompatActivity {
         termsTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Toast.makeText(getApplicationContext(),"Coming Soon",Toast.LENGTH_SHORT).show();
                 drawer_layout.closeDrawers();
             }
         });

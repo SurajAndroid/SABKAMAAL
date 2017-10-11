@@ -69,7 +69,7 @@ public class OrderHistoryAdapter extends BaseAdapter {
         final ViewHolder holder;
         if(convertView==null){
           holder = new ViewHolder();
-          convertView = layoutInflater.inflate(R.layout.product_order,null);
+          convertView = layoutInflater.inflate(R.layout.history_order,null);
 
             holder.name = (TextView) convertView.findViewById(R.id.name);
             holder.Qty = (TextView) convertView.findViewById(R.id.Qty);

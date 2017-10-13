@@ -183,6 +183,9 @@ public class OrderDetailActivity extends AppCompatActivity implements RequestRec
     @Override
     public void requestFinished(String[] result) throws Exception {
         if(result[0].equals("1")){
+            AppUtils.productOrderList.clear();
+            AppUtils.productId.clear();
+            AppUtils.productQuntity.clear();
             AlertDialog.Builder builder1 = new AlertDialog.Builder(OrderDetailActivity.this);
             builder1.setMessage("Order Received. \nThank you.!");
             builder1.setCancelable(true);

@@ -41,6 +41,7 @@ import com.smt.sabkamaal.holder.CategoryWiseProduct;
 import com.smt.sabkamaal.holder.ProductCategory;
 import com.smt.sabkamaal.holder.ProductCategoryData;
 import com.smt.sabkamaal.util.AppUtils;
+import com.smt.sabkamaal.util.Global;
 import com.smt.sabkamaal.webService.WebServiceUtil;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.RequestBody;
@@ -112,11 +113,17 @@ public class ProductActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
 
                for(int i=0;i<AppUtils.productList.size();i++){
-                   if(AppUtils.productList.get(i).getCustomer_quantity().equals("0")){
-
-                        if(AppUtils.productOrderList.contains(AppUtils.productList.get(i).getProduct_name())){
+                   if(!AppUtils.productList.get(i).getCustomer_quantity().equals("")){
+                        if(!AppUtils.productId.contains(AppUtils.productList.get(i).getProduct_name())){
+                            AppUtils.productId.add(AppUtils.productList.get(i).getProduct_name());
+                            AppUtils.productQuntity.add(AppUtils.productList.get(i).getCustomer_quantity());
                             AppUtils.productOrderList.add(AppUtils.productList.get(i));
-                            Log.e("",""+AppUtils.productList.get(i).getProduct_name());
+                        }else {
+                            if(AppUtils.productId.contains(AppUtils.productList.get(i).getProduct_name())){
+//                                if(AppUtils.productQuntity.contains(AppUtils.productList.get(i).getCustomer_quantity())){
+                                    AppUtils.productOrderList.set(i,AppUtils.productList.get(i));
+//                                }
+                            }
                         }
                    }
                }
@@ -133,8 +140,6 @@ public class ProductActivity extends AppCompatActivity {
         }
 
     }
-
-
 
 
     private void init() {

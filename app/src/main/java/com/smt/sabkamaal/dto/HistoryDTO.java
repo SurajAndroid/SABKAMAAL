@@ -6,7 +6,23 @@ package com.smt.sabkamaal.dto;
 
 public class HistoryDTO {
 
-    String product_id, qty, price, total, product_name;
+    String order_id, date_time, product_id, qty, price, total, product_name;
+
+    public String getOrder_id() {
+        return order_id;
+    }
+
+    public void setOrder_id(String order_id) {
+        this.order_id = order_id;
+    }
+
+    public String getDate_time() {
+        return date_time;
+    }
+
+    public void setDate_time(String date_time) {
+        this.date_time = date_time;
+    }
 
     public String getProduct_id() {
         return product_id;

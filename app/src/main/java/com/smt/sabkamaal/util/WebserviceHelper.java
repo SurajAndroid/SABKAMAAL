@@ -401,11 +401,13 @@ public class WebserviceHelper extends AsyncTask<Void, Void, String[]> {
 
                                 JSONObject arrObj = array.getJSONObject(i);
                                 JSONArray inerArry = arrObj.getJSONArray("orders");
+
                                 for(int j=0;j<inerArry.length();j++){
 
                                     JSONObject object2 = inerArry.getJSONObject(j);
                                     historyDTO = new HistoryDTO();
-
+                                    historyDTO.setOrder_id(arrObj.getString("order_id"));
+                                    historyDTO.setDate_time(arrObj.getString("created_at"));
                                     historyDTO.setProduct_id(object2.getString("product_id"));
                                     historyDTO.setQty(object2.getString("qty"));
                                     historyDTO.setPrice(object2.getString("price"));

@@ -75,6 +75,8 @@ public class OrderHistoryAdapter extends BaseAdapter {
             holder.Qty = (TextView) convertView.findViewById(R.id.Qty);
             holder.Rate = (TextView)convertView.findViewById(R.id.Rate);
             holder.Amt = (TextView)convertView.findViewById(R.id.Amt);
+            holder.dateTimeTxt = (TextView)convertView.findViewById(R.id.dateTimeTxt);
+            holder.orderidTxt = (TextView)convertView.findViewById(R.id.orderidTxt);
 
           convertView.setTag(holder);
         }else {
@@ -85,14 +87,15 @@ public class OrderHistoryAdapter extends BaseAdapter {
         holder.Qty.setText(data.get(position).getQty());
         holder.Rate.setText(data.get(position).getPrice());
         holder.Amt.setText(data.get(position).getTotal());
+        holder.dateTimeTxt.setText(data.get(position).getDate_time());
+        holder.orderidTxt.setText("Order Id - "+data.get(position).getOrder_id());
 
         return convertView;
     }
 
     class ViewHolder{
 
-        TextView name, Qty, Rate,Amt;
-        EditText editText;
-        ImageView productImage;
+        TextView name, Qty, Rate,Amt,dateTimeTxt, orderidTxt;
+
     }
 }

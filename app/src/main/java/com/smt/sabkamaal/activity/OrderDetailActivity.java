@@ -27,6 +27,7 @@ import com.smt.sabkamaal.util.RequestReceiver;
 import com.smt.sabkamaal.util.WebserviceHelper;
 
 import java.security.SecureRandom;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -78,10 +79,10 @@ public class OrderDetailActivity extends AppCompatActivity implements RequestRec
         tv_other = (TextView)findViewById(R.id.tv_other);
 
 
-        for(int i=0;i<AppUtils.productList.size();i++){
-            if(!AppUtils.productList.get(i).getCustomer_quantity().equals("")){
-                data.add(AppUtils.productList.get(i));
-                total += Double.parseDouble(AppUtils.productList.get(i).getTotal_price());
+        for(int i=0;i<AppUtils.productOrderList.size();i++){
+            if(!AppUtils.productOrderList.get(i).getCustomer_quantity().equals("")){
+                data.add(AppUtils.productOrderList.get(i));
+                total += Double.parseDouble(AppUtils.productOrderList.get(i).getTotal_price());
             }
         }
 
@@ -120,10 +121,11 @@ public class OrderDetailActivity extends AppCompatActivity implements RequestRec
         }
 
 
-        totalTxt.setText(""+total);
+        totalTxt.setText(""+new DecimalFormat("##.##").format(total));
 
+//        Toast.makeText(getApplicationContext(),"Size : "+AppUtils.productOrderList.size(),Toast.LENGTH_SHORT).show();
 
-        listAdapter = new OrderListAdapter(OrderDetailActivity.this,data);
+        listAdapter = new OrderListAdapter(OrderDetailActivity.this,AppUtils.productOrderList);
         listView.setAdapter(listAdapter);
 //        createOrder();
 

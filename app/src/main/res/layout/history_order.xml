@@ -130,6 +130,46 @@
 
     </TableRow>
 
+    <TableRow
+        android:paddingTop="5sp"
+        android:paddingBottom="5sp"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        >
+
+        <TextView
+            android:layout_marginLeft="5sp"
+            android:textColor="@color/textcolor"
+            android:singleLine="true"
+            android:layout_weight="1"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10sp"
+            android:textSize="16sp"
+            android:text="Name"
+            android:id="@+id/orderidTxt"
+            />
+
+
+
+        <TextView
+            android:id="@+id/dateTimeTxt"
+            android:layout_marginRight="5sp"
+            android:textColor="@color/textcolor"
+            android:singleLine="true"
+            android:layout_weight="1"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:textSize="16dp"
+            android:text="Amount" />
+
+
+
+
+    </TableRow>
 
 
 </LinearLayout>

@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.qintong.library.InsLoadingView;
 import com.smt.sabkamaal.R;
 import com.smt.sabkamaal.constant.AppConstants;
 import com.smt.sabkamaal.constant.URLConstant;
@@ -59,8 +60,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Bind(R.id.link_forgotpwd)
     TextView _forgotpwdLink;
     @Bind(R.id.rememberMe)CheckBox _rememberMe;
+
+    @Bind(R.id.loader)
+    InsLoadingView loading_view;
+
     SharedPreferences sharedPreferences;
     MarshMallowPermission marshMallowPermission;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,7 +75,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         ButterKnife.bind(this);
+
         receiver = this;
+        loading_view.setVisibility(View.INVISIBLE);
         _rememberMe.setOnClickListener(this);
         _loginButton.setOnClickListener(this);
         _signupLink.setOnClickListener(this);
@@ -163,6 +171,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         WebserviceHelper login = new WebserviceHelper(receiver, LoginActivity.this);
         login.setAction(Constant.LOGIN);
         login.execute();
+        loading_view.setVisibility(View.VISIBLE);
     }
 
     public void login() {
@@ -220,7 +229,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void requestFinished(String[] result) throws Exception {
 
         if(result[0].equals("1")){
-
+            loading_view.setVisibility(View.INVISIBLE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString("user_id", ""+AppUtils.profileList.get(0).getUser_id());
             editor.putString("full_name",""+AppUtils.profileList.get(0).getFull_name());
@@ -235,6 +244,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }else {
+            loading_view.setVisibility(View.INVISIBLE);
             Toast.makeText(getApplicationContext(),""+result[1],Toast.LENGTH_SHORT).show();
         }
     }

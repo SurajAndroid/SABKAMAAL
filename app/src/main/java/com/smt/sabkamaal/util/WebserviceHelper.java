@@ -96,9 +96,9 @@ public class WebserviceHelper extends AsyncTask<Void, Void, String[]> {
         dialog.setMessage("Please Wait...");
         dialog.setIndeterminate(true);
         dialog.setCancelable(false);
-        if (!dialog.isShowing()) {
+        /*if (!dialog.isShowing()) {
             dialog.show();
-        }
+        }*/
     }
 
     @SuppressWarnings("unchecked")

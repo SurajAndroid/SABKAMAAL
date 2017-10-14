@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.qintong.library.InsLoadingView;
 import com.smt.sabkamaal.R;
 import com.smt.sabkamaal.adapter.AllProductAdapter;
 import com.smt.sabkamaal.adapter.OrderAdapter;
@@ -47,6 +48,7 @@ public class OrderDetailActivity extends AppCompatActivity implements RequestRec
     ListView listView;
     TextView tv_order_no, tv_customer_name, tv_order_date, tv_transport_detail, tv_dispatch_date, tv_other;
     SharedPreferences sharedPreferences;
+    InsLoadingView loader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,8 @@ public class OrderDetailActivity extends AppCompatActivity implements RequestRec
 
     public void init(){
 
+        loader = (InsLoadingView)findViewById(R.id.loader);
+        loader.setVisibility(View.INVISIBLE);
         receiver = this;
         sharedPreferences = this.getSharedPreferences("login_status", Context.MODE_PRIVATE);
         data = new ArrayList<>();
@@ -136,6 +140,7 @@ public class OrderDetailActivity extends AppCompatActivity implements RequestRec
         WebserviceHelper order = new WebserviceHelper(receiver, OrderDetailActivity.this);
         order.setAction(Constant.CREATEORDER);
         order.execute();
+        loader.setVisibility(View.VISIBLE);
     }
 
 
@@ -183,6 +188,7 @@ public class OrderDetailActivity extends AppCompatActivity implements RequestRec
     @Override
     public void requestFinished(String[] result) throws Exception {
         if(result[0].equals("1")){
+            loader.setVisibility(View.INVISIBLE);
             AppUtils.productOrderList.clear();
             AppUtils.productId.clear();
             AppUtils.productQuntity.clear();
@@ -201,6 +207,8 @@ public class OrderDetailActivity extends AppCompatActivity implements RequestRec
 
             AlertDialog alert11 = builder1.create();
             alert11.show();
+        }else {
+            loader.setVisibility(View.INVISIBLE);
         }
     }
 }

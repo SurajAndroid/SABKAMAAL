@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.qintong.library.InsLoadingView;
 import com.smt.sabkamaal.R;
 import com.smt.sabkamaal.adapter.AllProductAdapter;
 import com.smt.sabkamaal.adapter.ImageSliderAdapter;
@@ -90,6 +91,7 @@ public class ProductActivity extends AppCompatActivity {
     LinearLayout slidMenuLayout;
     TextView rateUsTxt, offerTxt, rewardTxt, termsTxt, logoutTxt, orderHistoryTxt, homeTxt;
     SharedPreferences sharedPreferences;
+    InsLoadingView loader;
 
 
     @Override
@@ -102,6 +104,7 @@ public class ProductActivity extends AppCompatActivity {
         category = (Spinner) findViewById(R.id.material_spinner1);
         productDTO = new ProductDTO();
         proceedBtn = (ImageView) findViewById(R.id.proceedBtn);
+        loader = (InsLoadingView)findViewById(R.id.loader);
         product_grid = (GridView)findViewById(R.id.product_grid);
 
         proceedBtn.setOnClickListener(new View.OnClickListener() {
@@ -345,7 +348,8 @@ class FetchCategoryTask extends AsyncTask<Void, Void, String> {
 }
 
     private void getallproduct() {
-        final ProgressDialog loading = ProgressDialog.show(ProductActivity.this, "Getting Details", "Please wait", false, false);
+        loader.setVisibility(View.VISIBLE);
+//        final ProgressDialog loading = ProgressDialog.show(ProductActivity.this, "Getting Details", "Please wait", false, false);
         class AllProductTask extends AsyncTask<String, Void, String> {
             public void onPreExecute() {
 
@@ -412,7 +416,8 @@ class FetchCategoryTask extends AsyncTask<Void, Void, String> {
 
             @Override
             protected void onPostExecute(String result) {
-                loading.dismiss();
+//                loading.dismiss();
+                loader.setVisibility(View.INVISIBLE);
                 myJSON = result;
                 detail();
 
@@ -508,9 +513,10 @@ class FetchCategoryTask extends AsyncTask<Void, Void, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            loader.setVisibility(View.VISIBLE);
             progressDialog.setIndeterminate(true);
             progressDialog.setMessage("Fetching Product...");
-            progressDialog.show();
+//            progressDialog.show();
         }
 
         @Override
@@ -539,9 +545,10 @@ class FetchCategoryTask extends AsyncTask<Void, Void, String> {
         protected void onPostExecute(String json) {
             super.onPostExecute(json);
             try {
-                if (null != progressDialog && progressDialog.isShowing()) {
+                /*if (null != progressDialog && progressDialog.isShowing()) {
                     progressDialog.dismiss();
-                }
+                }*/
+                loader.setVisibility(View.INVISIBLE);
                 if (null != json) {
                     CategoryWiseProduct categoryWiseProduct = new Gson().fromJson(json, CategoryWiseProduct.class);
                     if (null != categoryWiseProduct) {

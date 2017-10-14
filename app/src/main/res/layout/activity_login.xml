@@ -162,5 +162,17 @@
             >
         </TextView>
 
+
+        <com.qintong.library.InsLoadingView
+            android:layout_centerInParent="true"
+            android:id="@+id/loader"
+            android:layout_width="100sp"
+            android:layout_height="100dp"
+            android:src="@drawable/app_icon_loder"
+            app:status="loading"
+
+            />
+
+
     </RelativeLayout>
 </ScrollView>
